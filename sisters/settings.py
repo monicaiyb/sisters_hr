@@ -30,6 +30,15 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1',
                  config('APP_HOST', default='127.0.0.1')]
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+                'rest_framework.permissions.AllowAny',
+    	'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+         'rest_framework_simplejwt.authentication.JWTAuthentication',
+	],
+     'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
@@ -81,26 +90,26 @@ WSGI_APPLICATION = 'sisters.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "mssql",
-        "NAME": config('DB_NAME'),
-        "USER": config('DB_USER'),
-        "PASSWORD": config('DB_PASSWORD'),
-        "HOST": config('DB_HOST'),
-        "PORT": config('DB_PORT'),
-        "OPTIONS": {
-            "driver": "ODBC Driver 17 for SQL Server",
-        },
-    },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "mssql",
+#         "NAME": config('DB_NAME'),
+#         "USER": config('DB_USER'),
+#         "PASSWORD": config('DB_PASSWORD'),
+#         "HOST": config('DB_HOST'),
+#         "PORT": config('DB_PORT'),
+#         "OPTIONS": {
+#             "driver": "ODBC Driver 17 for SQL Server",
+#         },
+#     },
+# }
 
 
 # Password validation

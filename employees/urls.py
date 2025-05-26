@@ -7,5 +7,6 @@ from employees.views import EmployeeList, EmployeeDetail
 urlpatterns = [
     path('employee', EmployeeList.as_view()),
     path('employee/<pk>', EmployeeDetail.as_view()),
+
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
