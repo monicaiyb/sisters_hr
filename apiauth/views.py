@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
 import jwt
 import datetime
 
@@ -84,6 +85,7 @@ class LoginApiView(APIView):
 
     # get user using cookie
 class UserView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         token = request.COOKIES.get('jwt')
 

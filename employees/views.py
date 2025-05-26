@@ -8,6 +8,7 @@ from rest_framework import (
     throttling, 
     renderers,
 )
+from rest_framework.permissions import IsAuthenticated
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -54,6 +55,7 @@ class EmployeeDetail(APIView):
 
 class AttendanceListCreateView(APIView):
     """This class defines the create behavior of our rest api."""
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         """Retrieves the list of attendance. """
@@ -73,6 +75,7 @@ class AttendanceListCreateView(APIView):
 
 class AttendanceRetrieveUpdateDestroyView(APIView):
     """This class handles the http GET, PUT and DELETE requests."""
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, format=None):
         """Retrieves a single attendance."""
