@@ -17,13 +17,14 @@ class Employee(models.Model):
     DOB = models.DateField(default='1980-01-01')
     email = models.EmailField(unique=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    hire_date = models.DateField(default='1980-01-01')
     owner = models.ForeignKey('auth.User', related_name='employee', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    
 
 
     
 class Attendance(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE, default=1)
     status = models.BooleanField(default='False')
     start_time = models.DateTimeField()
@@ -35,6 +36,7 @@ class Attendance(models.Model):
         verbose_name_plural = 'Attendance'
 
 class LeaveManagement(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE, default=1)
     start_date = models.DateField()
     end_date = models.DateField()
