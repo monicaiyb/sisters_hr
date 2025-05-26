@@ -15,12 +15,7 @@ from rest_framework import status
 from employees.serializers import EmployeeSerializer, GroupSerializer, UserSerializer
 
 class EmployeeList(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.AllowAny]
-    parser_classes = [parsers.JSONParser]
-    throttle_classes = [throttling.UserRateThrottle]
-    renderer_classes = [renderers.JSONRenderer]
-
+  
     def get(self, request, format=None):
         items = Employee.objects.all()
         serializer = EmployeeSerializer(items, many=True)
