@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Group, User
-from employees.models import Employee, Attendance, LeaveManagement
+from employees.models import Employee, Attendance
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:

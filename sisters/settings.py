@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='change_in_production')
 DEBUG = config('DEBUG', default='change_in_production')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 config('APP_HOST', default='127.0.0.1')]
+                 config('https://monicaiyb.pythonanywhere.com/', default='127.0.0.1')]
 
 REST_FRAMEWORK = {
        'DEFAULT_PERMISSION_CLASSES': (

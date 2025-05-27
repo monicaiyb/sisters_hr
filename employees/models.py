@@ -35,8 +35,4 @@ class Attendance(models.Model):
         verbose_name = 'Attendance'
         verbose_name_plural = 'Attendance'
 
-class LeaveManagement(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE, default=1)
-    start_date = models.DateField()
-    end_date = models.DateField()
+

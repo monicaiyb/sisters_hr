@@ -9,6 +9,7 @@ from rest_framework import (
     renderers,
 )
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,7 +17,8 @@ from rest_framework import status
 from employees.serializers import EmployeeSerializer, AttendenceSerializer, LeaveManagementSerializer
 
 class EmployeeList(APIView):
-  
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         items = Employee.objects.all()
         serializer = EmployeeSerializer(items, many=True)
@@ -31,7 +33,8 @@ class EmployeeList(APIView):
 
 
 class EmployeeDetail(APIView):
-
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk, format=None):
         item = self.get_object(pk)
         serializer = EmployeeSerializer(item)
