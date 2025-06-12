@@ -7,6 +7,11 @@ sex_choice = (
     ('Male', 'Male'),
     ('Female', 'Female')
 )
+STATUS_CHOICES = [
+        ('Present', 'Present'),
+        ('Absent', 'Absent'),
+        ('Leave', 'Leave'),
+    ]
 
 class Employee(models.Model):
     first_name=models.CharField(max_length=100)
@@ -26,10 +31,14 @@ class Employee(models.Model):
 class Attendance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE, default=1)
-    status = models.BooleanField(default='False')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     task=models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+
+    def __str__(self):
+        return f'{self.employee.first_name} - {self.date}'
+    
 
     class Meta:
         verbose_name = 'Attendance'

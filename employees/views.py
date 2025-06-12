@@ -1,6 +1,7 @@
 from django.shortcuts import render
+from django.utils import timezone
 from django.contrib.auth.models import Group, User
-from employees.models import Employee,Attendance,LeaveManagement
+from employees.models import Employee,Attendance
 from rest_framework import (
     authentication, 
     permissions, 
@@ -8,17 +9,18 @@ from rest_framework import (
     throttling, 
     renderers,
 )
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from employees.serializers import EmployeeSerializer, AttendenceSerializer, LeaveManagementSerializer
+from apiauth.permissions import IsHR
+from employees.serializers import EmployeeSerializer, AttendenceSerializer
 
 class EmployeeList(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     def get(self, request, format=None):
         items = Employee.objects.all()
         serializer = EmployeeSerializer(items, many=True)
@@ -62,6 +64,15 @@ class AttendanceListCreateView(APIView):
 
     def get(self, request, format=None):
         """Retrieves the list of attendance. """
+
+        date_str = request.get('date')
+        status = request.get('status')
+
+        # Convert the date string to a Python date object
+        date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
+
+        # Check if an attendance record already exists for the given date and employee
+        existing_attendance = Attendance.objects.filter(employee=Employee, date=date)
         items = Attendance.objects.all()
         serializer = AttendenceSerializer(items, many=True)
         return Response(serializer.data)
@@ -100,3 +111,16 @@ class AttendanceRetrieveUpdateDestroyView(APIView):
         company = self.get_object(pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class Dashboard(APIView):
+    permission_classes = [IsAuthenticated, IsHR]
+
+    def get(self, request):
+        employee_count = Employee.objects.all().count()
+        attendance_count = Attendance.objects.all().count()
+
+        return Response({
+                    'employee_count': employee_count,
+                    'attendance_count': attendance_count
+                }, status=status.HTTP_201_CREATED)

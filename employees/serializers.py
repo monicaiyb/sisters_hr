@@ -27,10 +27,7 @@ class AttendenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LeaveManagementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LeaveManagement
-        fields = '__all__'
+
 
 
 

@@ -28,8 +28,8 @@ class LeaveManagement(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     leavetype = models.CharField(choices=LEAVE_TYPE,max_length=25,default=SICK,null=True,blank=False)
-    reason = models.CharField(verbose_name=_('Reason for Leave'),max_length=255,help_text='add additional information for leave',null=True,blank=True)
-    defaultdays = models.PositiveIntegerField(verbose_name=_('Leave days per year counter'),default=DAYS,null=True,blank=True)
+    reason = models.CharField(verbose_name=('Reason for Leave'),max_length=255,help_text='add additional information for leave',null=True,blank=True)
+    defaultdays = models.PositiveIntegerField(verbose_name=('Leave days per year counter'),default=DAYS,null=True,blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', null=True)
     is_approved = models.BooleanField(default=False) #hide
 
@@ -37,8 +37,8 @@ class LeaveManagement(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     class Meta:
-        verbose_name = _('Leave')
-        verbose_name_plural = _('Leaves')
+        verbose_name = ('Leave')
+        verbose_name_plural = ('Leaves')
         ordering = ['-created'] #recent objects
 
 
