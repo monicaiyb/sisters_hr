@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.utils import timezone
+from django.db.models import Count  #for dashboard
 from django.contrib.auth.models import Group, User
 from employees.models import Employee,Attendance
 from rest_framework import (
@@ -81,6 +82,7 @@ class AttendanceListCreateView(APIView):
     def post(self, request, format=None):
         """Save the post data when creating a new attenance."""
         serializer = AttendenceSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -118,9 +120,17 @@ class Dashboard(APIView):
 
     def get(self, request):
         employee_count = Employee.objects.all().count()
+        department_stats = Employee.objects.values('department').annotate(count=Count('department'))
+        # Attendence Stats
         attendance_count = Attendance.objects.all().count()
+        attendance_present = Attendance.objects.filter(status='Present').count()
+        attendance_absent = Attendance.objects.filter(status='Absent').count()
+        attendance_leave = Attendance.objects.filter(status='Leave').count()
 
         return Response({
                     'employee_count': employee_count,
-                    'attendance_count': attendance_count
+                    'attendance_count': attendance_count,
+                    'attendance_present':attendance_present,
+                    'attendance_absent':attendance_absent,
+                    'attendance_leave':attendance_leave
                 }, status=status.HTTP_201_CREATED)
