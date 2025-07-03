@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Group, User
-from employees.models import Employee, Attendance, LeaveManagement
+from employees.models import Employee, Attendance
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,10 +27,7 @@ class AttendenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LeaveManagementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LeaveManagement
-        fields = '__all__'
+
 
 
 

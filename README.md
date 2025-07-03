@@ -1,4 +1,4 @@
-# internshipManagement
+# Sisters
 Python Project for HR Management. This application uses [Django(5.2.1)](https://www.djangoproject.com/).
 
 ## Requirements
@@ -21,15 +21,7 @@ Running the application should allow you to hit `http://127.0.0.1:8000` in your 
 - Any key whose value changes from one environment to another should go to the .env file.
 - The .env file should not be part of version control. It is local to the machine the code is on.
 
-## Views
-Django Views are one of the vital participants of MVT Structure of Django. As per Django Documentation,
-A view function is a Python function that takes a Web request and returns a Web response. 
-This response can be the HTML contents of a Web page, or a redirect, or a 404 error, or an XML document, 
-or an image, anything that a web browser can display. [Read More](https://www.w3schools.com/django/django_views.php)
 
-Django views can be functions or classes. In this application we mostly use class based views. These allow us to 
-structure your views and reuse code by harnessing inheritance and mixins. 
-[Docs](https://docs.djangoproject.com/en/4.0/topics/class-based-views/)
 
 Example
 ```python
