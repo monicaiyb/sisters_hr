@@ -52,9 +52,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+       'rest_framework.authtoken',
+      'leave',
     'employees',
     'apiauth'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=50),
