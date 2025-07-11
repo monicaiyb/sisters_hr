@@ -1,11 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from employees.serializers import EmployeeSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token 
 import jwt
 import datetime
 
@@ -84,6 +87,39 @@ class LoginApiView(APIView):
     
 
     # get user using cookie
+
+class UserLoginView(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            token, created = Token.objects.get_or_create(user=user)
+            if created:
+                token.delete()  # Delete the token if it was already created
+                token = Token.objects.create(user=user)
+
+            response_data = {
+                'token': token.key,
+                'username': user.username,
+                'role': user.role,
+            }
+
+            if user.role == 'employee':
+                employee = user.employee  # Assuming the related name is "student_account"
+                if employee is not None:
+                    # Add student data to the response data
+                    employee_data = EmployeeSerializer(employee).data
+                    response_data['data'] = employee_data
+
+            return Response(response_data)
+        else:
+            return Response({'message': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
