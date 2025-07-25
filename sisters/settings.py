@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'apiauth'
 ]
 
+AUTH_USER_MODEL = 'apiauth.User'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',

@@ -1,9 +1,21 @@
+from django.http import Http404
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.core.mail import EmailMessage
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import (
+    CreateAPIView,
+    RetrieveAPIView,
+)
 from .serializers import (LoginSerializer, RegisterSerializer, UserSerializer,   
                           ResendEmailVerificationSerializer,ChangePasswordSerializer,
     ResetPasswordSerializer,
     SetPasswordSerializer)
+from utils.jwt_token import token_generator
+from utils.jwt_token import token_decoder
+# from utils.email import EmailThread
 from employees.serializers import EmployeeSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -12,6 +24,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token 
+from rest_framework import permissions
 import jwt
 import datetime
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -27,25 +40,30 @@ class LogoutApiView(APIView):
             status=status.HTTP_200_OK,
         )
 
+class RegisterAPIView(CreateAPIView):
+    """Register a new user"""
 
-class RegisterApiView(APIView):
-    def post(self, request, *args, **kwargs):
-        """
-        Register class
-        """
+    model = User
+    permission_classes = [permissions.AllowAny]
+    serializer_class = RegisterSerializer
+# class RegisterApiView(APIView):
+#     def post(self, request, *args, **kwargs):
+#         """
+#         Register class
+#         """
 
-        serializer = RegisterSerializer(data=request.data, many=False)
+#         serializer = RegisterSerializer(data=request.data, many=False)
 
-        if serializer.is_valid():
-            username = serializer.validated_data["username"]
-            password = serializer.validated_data["password1"]
-            user = User.objects.create_user(
-                username=username, password=password
-            )
-            authenticate(request, username=username, password=password)
-            login(request, user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if serializer.is_valid():
+#             username = serializer.validated_data["username"]
+#             password = serializer.validated_data["password1"]
+#             user = User.objects.create_user(
+#                 username=username, password=password
+#             )
+#             authenticate(request, username=username, password=password)
+#             login(request, user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginApiView(APIView):
